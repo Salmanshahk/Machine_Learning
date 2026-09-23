@@ -59,3 +59,22 @@ for feature,coef in zip(X.columns,model.coef_[0]):
 print(f"    {'Intercept':.<30} {model.intercept_[0]:>8.4f} ")
 
 print(f"\n Accuracy:{accuracy_score(Y_test,y_pred)*100:.2f}%")
+
+print(f"Odds Ratio")
+
+print("Odds Ratio = e^(coefficient)")
+
+print(" > 1 : Feature INCREASES chance of passing")
+print(" < 1 : Feature DECREASES chance of passing")
+print(" = 1 : No effect\n")
+
+slope = model.coef_[0]
+print(f"Slope: ", slope)
+
+odds_ratio = np.exp(model.coef_[0])
+print(f"Odds Ratio: ", odds_ratio)
+
+for feature,odds in zip(X.columns,odds_ratio):
+    direction = '(+) Increases chance of passing' if odds > 1 else '(-) Decreases chance of passing'
+    print(f" {feature:<20} odds_ratio = {odds:.4f} {direction} chance of passing")
+
