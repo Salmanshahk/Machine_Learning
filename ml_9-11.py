@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,confusion_matrix, classification_report
 
 df = pd.read_csv("E:\Data Science, ML & AI\Varun & Aashique\Machine_Leaning\student_performance_dataset.csv")
 
@@ -91,9 +91,23 @@ for i in range(len(Y_test)):
     marker = "[ok]" if pred == actual else "[fail]"
     print(f" {i+1:4} | {p_fail:.7f} | {p_pass:.7f} | {'Pass' if pred==1 else 'Fail':9} | {'Pass' if actual == 1 else  'Fail':5} {marker} ")
 
+cm = confusion_matrix(Y_test,y_pred)
+print("confusion matrix")
+print("-" * 40)
+print(f"                Predicted:")
+print(f"                Fail    Pass")
 
+#print(f"predicted: {cm.flatten()}")
 
+print(f"Actual Fail {cm[0][0]:4}    {cm[0][1]:4}")
+print(f"Actual Pass {cm[1][0]:4}    {cm[1][1]:4}")
 
+print(f" True Negative {cm[0][0]}")
+print(f" False Positive {cm[0][1]}")
+print(f" False Negative {cm[1][0]}")
+print(f" True Positive {cm[1][1]}")
+
+print(classification_report(Y_test,y_pred,target_names=['Fail (0)','Pass (1)']))
 
 
 
