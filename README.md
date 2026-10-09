@@ -439,6 +439,189 @@ print(f"Accuracy: {accuracy}")
 
 # ML-14 Completed
 
+# ML-15 Started
 
+# Decision Tree
+#### Decision tree is a popular model in machine learning used for classification and regression task. 
+#### It works like a flowchart where each internal note represents the decision based on feature, each branch represent the outcome of the decision and each leave note represents A final prediction 
+
+#### Decision tree classifier: 
+####    Algorithms: 
+#####        1. ID 3 
+#####        2. CART 
+
+![image.png](attachment:image.png)
+![image-2.png](attachment:image-2.png)
+![image-3.png](attachment:image-3.png)
+
+![image-4.png](attachment:image-4.png)
+![image-7.png](attachment:image-7.png)
+![image-5.png](attachment:image-5.png)
+![image-6.png](attachment:image-6.png)
+
+## Multi Way Split explanation
+
+# Decision Trees: Multiway Split (K-ary Split)
+
+A **Multiway Split** (also referred to as a **K-ary Split**) is a decision tree branching strategy where a single decision node divides into **$k$ distinct child branches simultaneously**, corresponding to the $k$ distinct categorical values of the splitting attribute.
+
+Below is the complete architectural diagram and infographic generated for this concept:
+
+![Multiway Split Architecture and Mathematical Explanation](C:\Users\Acer\.gemini\antigravity-ide\brain\4ecdc158-3275-42ef-9dad-4b9e2942101a\multiway_split_weather_explanation.png)
+
+---
+
+## 1. What is a Multiway Split?
+
+In algorithms like **ID3**, **C4.5**, and **CHAID**:
+- When a categorical feature $A$ is selected for splitting at node $N$, the algorithm creates one child branch for **every possible discrete value** $v \in \text{Domain}(A)$.
+- Given dataset $D$ at node $N$ and attribute $A = \{v_1, v_2, \dots, v_k\}$:
+  $$D_j = \{ x \in D \mid x.A = v_j \}, \quad \text{for } j = 1, 2, \dots, k$$
+- The partition is exhaustive and mutually exclusive:
+  $$D = \bigcup_{j=1}^k D_j \quad \text{and} \quad D_i \cap D_j = \emptyset \ (i \neq j)$$
+
+### Multiway Split vs. Binary Split (CART)
+
+| Characteristic | Multiway Split (ID3 / C4.5 / CHAID) | Binary Split (CART / scikit-learn) |
+| :--- | :--- | :--- |
+| **Branching Factor** | $k$ branches ($k =$ number of discrete categories) | Exactly 2 branches (`True` / `False`) |
+| **Tree Geometry** | Flatter, wider tree | Deeper, narrower tree |
+| **Categorical Handling** | 1 branch per categorical value naturally | Requires subset partitioning ($A \in S$ vs $A \notin S$) |
+| **Data Fragmentation** | **High**: Data sample size drops quickly across $k$ nodes | **Low**: Samples divide into only 2 subsets per level |
+| **Continuous Features** | Discretized into $k$ numeric intervals | Threshold split: $Feature \le \theta$ |
+
+---
+
+## 2. Sample Weather Dataset (Play Tennis)
+
+The standard benchmark dataset consists of 14 historical records with features `Outlook`, `Temperature`, `Humidity`, `Wind`, and target `Play Tennis?`:
+
+| Day | Outlook | Temperature | Humidity | Wind | Play Tennis? |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **D1** | Sunny | Hot | High | Weak | **No** |
+| **D2** | Sunny | Hot | High | Strong | **No** |
+| **D3** | Overcast | Hot | High | Weak | **Yes** |
+| **D4** | Rain | Mild | High | Weak | **Yes** |
+| **D5** | Rain | Cool | Normal | Weak | **Yes** |
+| **D6** | Rain | Cool | Normal | Strong | **No** |
+| **D7** | Overcast | Cool | Normal | Strong | **Yes** |
+| **D8** | Sunny | Mild | High | Weak | **No** |
+| **D9** | Sunny | Cool | Normal | Weak | **Yes** |
+| **D10** | Rain | Mild | Normal | Weak | **Yes** |
+| **D11** | Sunny | Mild | Normal | Strong | **Yes** |
+| **D12** | Overcast | Mild | High | Strong | **Yes** |
+| **D13** | Overcast | Hot | Normal | Weak | **Yes** |
+| **D14** | Rain | Mild | High | Strong | **No** |
+
+- **Total records**: $|D| = 14$ ($9\text{ Yes}, 5\text{ No}$)
+- **Splitting Feature**: `Outlook` has $k = 3$ discrete values: `{Sunny, Overcast, Rain}`.
+
+---
+
+## 3. Tree Split Structure on `Outlook`
+
+```mermaid
+graph TD
+    Root["<b>Root: Outlook?</b><br/>Total: 14 [9 Yes, 5 No]<br/>Entropy H = 0.9402"]
+    
+    Root -->|"Branch 1: Sunny"| Sunny["<b>D_Sunny (n=5)</b><br/>2 Yes | 3 No<br/>Entropy H = 0.9710<br/><i>(Impure)</i>"]
+    Root -->|"Branch 2: Overcast"| Overcast["<b>D_Overcast (n=4)</b><br/>4 Yes | 0 No<br/>Entropy H = 0.0000<br/><b>PURE LEAF NODE</b>"]
+    Root -->|"Branch 3: Rain"| Rain["<b>D_Rain (n=5)</b><br/>3 Yes | 2 No<br/>Entropy H = 0.9710<br/><i>(Impure)</i>"]
+
+    Sunny -->|"Next Split: Humidity?"| HumLeaf["High -> No (3)<br/>Normal -> Yes (2)"]
+    Overcast --> Term["<b>PREDICT: PLAY = YES</b><br/><i>(Zero entropy, stop splitting)</i>"]
+    Rain -->|"Next Split: Wind?"| WindLeaf["Weak -> Yes (3)<br/>Strong -> No (2)"]
+
+    classDef pure fill:#0C3322,stroke:#34D399,stroke-width:2px,color:#fff;
+    classDef impure fill:#1E293B,stroke:#38BDF8,stroke-width:2px,color:#fff;
+    class Overcast,Term pure;
+    class Root,Sunny,Rain,HumLeaf,WindLeaf impure;
+```
+
+1. **`Outlook == 'Overcast'` (Pure Leaf)**:
+   - Contains 4 samples (D3, D7, D12, D13), all 4 are `Yes`.
+   - Entropy drops to $0.0000$. Splitting stops immediately, and the node outputs prediction **`Play = Yes`**.
+2. **`Outlook == 'Sunny'`**:
+   - Contains 5 samples (D1, D2, D8, D9, D11): 2 `Yes`, 3 `No`.
+   - Impure ($H = 0.9710$). Needs a secondary split on `Humidity` (`High` $\to$ No, `Normal` $\to$ Yes).
+3. **`Outlook == 'Rain'`**:
+   - Contains 5 samples (D4, D5, D6, D10, D14): 3 `Yes`, 2 `No`.
+   - Impure ($H = 0.9710$). Needs a secondary split on `Wind` (`Weak` $\to$ Yes, `Strong` $\to$ No).
+
+---
+
+## 4. Mathematical Derivation (Entropy & Information Gain)
+
+### Step 1: Root Shannon Entropy
+$$H(D) = - \sum_{i=1}^C p_i \log_2(p_i) = - \left[ \frac{9}{14} \log_2 \left(\frac{9}{14}\right) + \frac{5}{14} \log_2 \left(\frac{5}{14}\right) \right] = 0.9402 \text{ bits}$$
+
+### Step 2: Child Node Entropies
+- **Sunny ($n = 5$, 2 Yes, 3 No)**:
+  $$H(D_{\text{Sunny}}) = - \left[ \frac{2}{5} \log_2 \left(\frac{2}{5}\right) + \frac{3}{5} \log_2 \left(\frac{3}{5}\right) \right] = 0.9710 \text{ bits}$$
+- **Overcast ($n = 4$, 4 Yes, 0 No)**:
+  $$H(D_{\text{Overcast}}) = - \left[ \frac{4}{4} \log_2 \left(\frac{4}{4}\right) + 0 \right] = 0.0000 \text{ bits} \quad (\text{Pure})$$
+- **Rain ($n = 5$, 3 Yes, 2 No)**:
+  $$H(D_{\text{Rain}}) = - \left[ \frac{3}{5} \log_2 \left(\frac{3}{5}\right) + \frac{2}{5} \log_2 \left(\frac{2}{5}\right) \right] = 0.9710 \text{ bits}$$
+
+### Step 3: Weighted Expected Entropy After Multiway Split
+$$H(D \mid \text{Outlook}) = \sum_{v \in \{\text{Sunny}, \text{Overcast}, \text{Rain}\}} \frac{|D_v|}{|D|} H(D_v)$$
+$$H(D \mid \text{Outlook}) = \frac{5}{14}(0.9710) + \frac{4}{14}(0.0000) + \frac{5}{14}(0.9710) = 0.6936 \text{ bits}$$
+
+### Step 4: Information Gain Calculation
+$$IG(D, \text{Outlook}) = H(D) - H(D \mid \text{Outlook}) = 0.9402 - 0.6936 = \mathbf{0.2466 \text{ bits}}$$
+
+### Step 5: Attribute Comparison
+Comparing Information Gain across all candidate attributes demonstrates why `Outlook` is selected as the root node:
+- **`IG(D, Outlook) = 0.2466`** $\leftarrow$ **Highest Gain**
+- `IG(D, Humidity) = 0.1518`
+- `IG(D, Wind) = 0.0481`
+- `IG(D, Temperature) = 0.0289`
+
+---
+
+## 5. Strengths & Limitations
+
+> [!TIP]
+> **Advantages of Multiway Split**:
+> - Directly represents nominal data without arbitrary binary groupings or dummy encoding.
+> - Produces concise, shallow trees that closely follow domain logic.
+
+> [!WARNING]
+> **Data Fragmentation & High-Cardinality Bias**:
+> - **Data Starvation**: Splitting samples $k$ ways at every step can leave very few training instances in deeper child nodes.
+> - **Bias towards high-cardinality attributes**: Features with many unique values (like `Customer_ID` or `Date`) trivially achieve $H = 0$ at child nodes.
+> - **Solution**: C4.5 addresses this by normalizing Information Gain using **Split Information** to compute the **Gain Ratio**:
+>   $$\text{GainRatio}(D, A) = \frac{IG(D, A)}{\text{SplitInfo}(D, A)}, \quad \text{where } \text{SplitInfo}(D, A) = - \sum_{j=1}^k \frac{|D_j|}{|D|} \log_2 \left( \frac{|D_j|}{|D|} \right)$$
+
+
+# ML - 16 Started
+
+## Decision Tree
+![image.png](attachment:image.png)
+![image-2.png](attachment:image-2.png)
+
+
+#### If I have large dataset with more columns
+#### If you use Entropy or Gini and still do not find a node/split in your decision tree, usually on of these reasons is happening
+
+![image-3.png](attachment:image-3.png)
+
+## Gini
+
+#### Symbol    - Meaning
+####    ∑      - Summation (Add all values)
+####    p(i)   - Probability of each class
+####    p(i)^2 - Square of Probability
+####    1      - Substract from 1 
+
+![image-4.png](attachment:image-4.png)
+![image-5.png](attachment:image-5.png)
+![image-6.png](attachment:image-6.png)
+![image-7.png](attachment:image-7.png)
+![image-8.png](attachment:image-8.png)
+![image-10.png](attachment:image-10.png)
+![image-11.png](attachment:image-11.png)
+![image-12.png](attachment:image-12.png)
+![image-13.png](attachment:image-13.png)
 
 
