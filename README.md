@@ -594,5 +594,34 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 >   $$\text{GainRatio}(D, A) = \frac{IG(D, A)}{\text{SplitInfo}(D, A)}, \quad \text{where } \text{SplitInfo}(D, A) = - \sum_{j=1}^k \frac{|D_j|}{|D|} \log_2 \left( \frac{|D_j|}{|D|} \right)$$
 
 
+# ML - 16 Started
+
+## Decision Tree
+![image.png](attachment:image.png)
+![image-2.png](attachment:image-2.png)
+
+
+#### If I have large dataset with more columns
+#### If you use Entropy or Gini and still do not find a node/split in your decision tree, usually on of these reasons is happening
+
+![image-3.png](attachment:image-3.png)
+
+## Gini
+
+#### Symbol    - Meaning
+####    ∑      - Summation (Add all values)
+####    p(i)   - Probability of each class
+####    p(i)^2 - Square of Probability
+####    1      - Substract from 1 
+
+![image-4.png](attachment:image-4.png)
+![image-5.png](attachment:image-5.png)
+![image-6.png](attachment:image-6.png)
+![image-7.png](attachment:image-7.png)
+![image-8.png](attachment:image-8.png)
+![image-10.png](attachment:image-10.png)
+![image-11.png](attachment:image-11.png)
+![image-12.png](attachment:image-12.png)
+![image-13.png](attachment:image-13.png)
 
 
