@@ -625,3 +625,26 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 ![image-13.png](attachment:image-13.png)
 
 
+# ML - 17 Started
+
+## Information Gain
+### Information Gain is used in a decision Tree to find:
+### Which attribute gives the best split
+
+### Formula
+
+#### Information Gain = Parent Entropy - Weighted Child Entropy
+![image.png](attachment:image.png)
+![image-2.png](attachment:image-2.png)
+![image-3.png](attachment:image-3.png)
+
+
+## When to use Entropy Vs Gini 
+
+![image-4.png](attachment:image-4.png)
+![image-5.png](attachment:image-5.png)
+![image-6.png](attachment:image-6.png)
+![image-8.png](attachment:image-8.png)
+![image-7.png](attachment:image-7.png)
+
+### Done
