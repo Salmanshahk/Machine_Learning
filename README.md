@@ -648,3 +648,4 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 ![image-7.png](attachment:image-7.png)
 
 ### Done
+# ML - 18 Done with once car prediction program
