@@ -1,0 +1,87 @@
+import warnings
+warnings.filterwarnings('ignore')
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split,GridSearchCV
+from sklearn.tree import DecisionTreeClassifier,plot_tree
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import r2_score,mean_squared_error,mean_absolute_error
+
+# Load Dataset
+
+#CSV_FILE = 'heart_disease.csv'
+df = pd.read_csv(CSV_FILE)
+df.head()
+
+def new_line():
+    print("\n")
+    print("\n")
+
+print(df.head())
+
+new_line()
+print(f"Loaded '{CSV_FILE}' -> {df.shape[0]} Rows x {df.shape[1]} Columns")
+
+new_line()
+print("First 5 rows")
+print(df.head())
+new_line()
+new_line()
+new_line()
+new_line()
+print("Columns Data types")
+print(df.dtypes)
+print("Basic Statistics")
+print(df.describe(include=all))
+new_line()
+print("Missing Values")
+print(df.isnull.sum())
+
+fig,axes = plt.subplots(nrows=2,ncols=2,figsize=(18,10))
+
+# Selling Price Distribution
+
+axes[0,0].hist(df[TARGET_COL]/1e5,bins=40,edgecolor='black', linewidth=0.4)
+axes[0,0].set_title('Selling Price Distribution', fontsize=16)
+axes[0,0].set_xlabel('Price (in Lakhs)', fontsize=14)
+axes[0,0].set_ylabel('Count', fontsize=14)
+
+# Average price by brand
+brand_avg = df.groupby('Brand')[TARGET_COL].median().sort_values(ascending=False)/1e5
+brand_avg.plot(kind='bar',ax=axes[0,1],color='steelblue',edgecolor='k',linewidth=0.5)
+axes[0,1].set_title('Median Price by Brand', fontsize=16)
+axes[0,1].set_xlabel('Brand', fontsize=14)
+axes[0,1].set_ylabel('Price (in Lakhs)', fontsize=14)
+axes[0,1].tick_params(axis='x',rotation=45)
+
+# Price by Fuel Type
+sns.boxplot(data=df,x='Fuel_Type',y=TARGET_COL,ax=axes[0,2],palette='Set',linewidth=0.8)
+axes[0,2].set_title('Price by Fuel Type',fontsize=16)
+axes[0,2].set_ylabel('Price by fuel type',fontsize=14)
+axes[0,2].tick_params(axis='x',rotation=15)
+
+# Year vs Price Scatter
+axes[1,0].scatter(df['Year'],df[TARGET_COL]/1e5,alpha=0.4,color='steelblue',edgecolor='None',s=15)
+axes[1,0].set_title('Year vs Selling Price',fontsize=16)
+axes[1,0].set_xlabel('Year',fontsize=14)
+axes[1,0].set_ylabel('Price (in Lakhs)',fontsize=14)
+
+# KM Driven vs price
+axes[1,1].scatter(df['KM_Driven']/1e3,df[TARGET_COL]/1e5,alpha=0.4,color='mediumseagreen',edgecolor='None',s=15)
+axes[1,1].set_title('KM Driven vs Selling Price',fontsize=16)
+axes[1,1].set_xlabel('KM Driven (in thousands)',fontsize=14)
+axes[1,1].set_ylabel('Price (in Lakhs)',fontsize=14)
+
+# Price by Transmission
+sns.boxplot(data=df,x='Transmission',y=TARGET_COL,ax=axes[1,2],palette='Set1',linewidth=0.8)
+axes[1,2].set_title('Price by Transmission',fontsize=16)
+axes[1,2].set_ylabel('Selling Price',fontsize=14)
+axes[1,2].tick_params(axis='x',rotation=15)
+
+plt.tight_layout()
+plt.show()
+plt.savefig("EDA_Plots_.png",dpi=300,bbox_inches="tight")
+plt.close()
