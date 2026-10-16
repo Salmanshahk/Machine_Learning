@@ -749,3 +749,11 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 # ML - 20 Done with once car prediction program
 
 # ML - 21 Done with once car prediction program
+
+# 1e5 => (1*10)^5 = 1*10*10*10*10*10 = 100000
+
+# 1e4 => (1*10)^4 = 1*10*10*10\*10 = 10000
+
+# 1e3 => (1*10)^3 = 1*10*10*10 = 1000
+
+# 1e2 => (1*10)^2 = 1*10\*10 = 100
