@@ -757,3 +757,5 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 # 1e3 => (1*10)^3 = 1*10*10*10 = 1000
 
 # 1e2 => (1*10)^2 = 1*10\*10 = 100
+
+# ML - 22 Done with once car prediction program
