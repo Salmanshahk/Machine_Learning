@@ -50,6 +50,8 @@ axes[0,0].set_title('Selling Price Distribution', fontsize=16)
 axes[0,0].set_xlabel('Price (in Lakhs)', fontsize=14)
 axes[0,0].set_ylabel('Count', fontsize=14)
 
+print("\n Generatig Plots . . .")
+
 # Average price by brand
 brand_avg = df.groupby('Brand')[TARGET_COL].median().sort_values(ascending=False)/1e5
 brand_avg.plot(kind='bar',ax=axes[0,1],color='steelblue',edgecolor='k',linewidth=0.5)
@@ -58,17 +60,23 @@ axes[0,1].set_xlabel('Brand', fontsize=14)
 axes[0,1].set_ylabel('Price (in Lakhs)', fontsize=14)
 axes[0,1].tick_params(axis='x',rotation=45)
 
+print("\n Generatig Plots . . .")
+
 # Price by Fuel Type
 sns.boxplot(data=df,x='Fuel',y=TARGET_COL,ax=axes[0,2],palette='Set2',linewidth=0.8)
 axes[0,2].set_title('Price by Fuel Type',fontsize=16)
 axes[0,2].set_ylabel('Price by fuel type',fontsize=14)
 axes[0,2].tick_params(axis='x',rotation=15)
 
+print("\n Generatig Plots . . .")
+
 # Year vs Price Scatter
 axes[1,0].scatter(df['Year'],df[TARGET_COL]/1e5,alpha=0.4,color='steelblue',edgecolor='None',s=15)
 axes[1,0].set_title('Year vs Selling Price',fontsize=16)
 axes[1,0].set_xlabel('Year',fontsize=14)
 axes[1,0].set_ylabel('Price (in Lakhs)',fontsize=14)
+
+print("\n Generatig Plots . . .")
 
 # KM Driven vs price
 axes[1,1].scatter(df['Km_Driven']/1e3,df[TARGET_COL]/1e5,alpha=0.4,color='mediumseagreen',edgecolor='None',s=15)
@@ -223,9 +231,26 @@ plt.savefig('Evaluation_plots.png',dpi=200,bbox_inches='tight')
 plt.close()
 print('. . . .  Saved . . . .')
 
+print("\n Generatig Plots . . .")
 
+plt.figure(figsize=(24,10))
+plot_tree(
+    best_model,feature_names = X.columns.tolist(),
+    filled=True,
+    rounded=True,
+    fontsize=9,
+    max_depth=4
+)
+plt.title("Car price Prediction . . .")
+plt.tight_layout()
+plt.savefig('Decision_Tree.png',dpi=200,bbox_inches='tight')
+plt.close()
 
-
+sample = X_test.head(10).copy()
+sample['Actual ($)'] = Y_test.head(10).values
+sample["prediction"] = grid_search.predict(X_test.head(10).astype(int))
+sample['Error'] = (sample['Actual ($)'] - sample['prediction'].abs())
+print(sample[['Actual ($)','prediction','Error']].to_string())
 
 
 
