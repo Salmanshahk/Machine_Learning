@@ -232,4 +232,14 @@ grid_search.fit(X_train,y_train)
 for k,v in grid_search.best_params_.items():
     print(f"{k}: {v}")
 
+y_pred = grid_search.predict(X_test)
+y_proba = grid_search.predict_proba(X_test)[:,1]
+
+acc = accuracy_score(y_test,y_pred)
+roc_auc = roc_auc_score(y_test,y_proba)
+print(f"Accuracy : {acc:.4f}")
+print(f"ROC - AUC : {roc_auc:.4f}")
+
+
+# Model Evaluation
 

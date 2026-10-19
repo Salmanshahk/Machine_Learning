@@ -759,3 +759,9 @@ Comparing Information Gain across all candidate attributes demonstrates why `Out
 # 1e2 => (1*10)^2 = 1*10\*10 = 100
 
 # ML - 22 Done with once car prediction program
+
+# ML - 23 Done with once car prediction program with Decision Tree
+
+# ML - 24 Done with Loan prediction program
+
+# ML - 25 Done with Loan prediction program
